@@ -26,6 +26,9 @@ public:
 	EMcl2Node();
 	~EMcl2Node();
 
+	std::shared_ptr<OdomModel> om_;
+	std::shared_ptr<OdomModel> initOdometry(void);
+
 	void loop(void);
 	int getOdomFreq(void);
 private:
@@ -75,7 +78,6 @@ private:
 	void registerDynamicParam(void);
 	void initPF(void);
 	std::shared_ptr<LikelihoodFieldMap> initMap(void);
-	std::shared_ptr<OdomModel> initOdometry(void);
 
 	void cbScan(const sensor_msgs::LaserScan::ConstPtr &msg);
 	bool cbSimpleReset(std_srvs::Empty::Request& req, std_srvs::Empty::Response& res);
