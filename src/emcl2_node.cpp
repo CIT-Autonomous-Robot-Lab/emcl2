@@ -42,10 +42,31 @@ void EMcl2Node::initCommunication(void)
 	private_nh_.param("odom_frame_id", odom_frame_id_, std::string("odom"));
 	private_nh_.param("base_frame_id", base_frame_id_, std::string("base_link"));
 
+	registerDynamicParam();
+
 	tfb_.reset(new tf2_ros::TransformBroadcaster());
 	tf_.reset(new tf2_ros::Buffer());
 	tfl_.reset(new tf2_ros::TransformListener(*tf_));
 }
+
+void EMcl2Node::registerDynamicParam(void)
+{
+	ddr_ = std::make_shared<ddynamic_reconfigure::DDynamicReconfigure>(private_nh_);
+	double double_odom_fw_dev_per_fw = 2;
+	ddr_->RegisterVariable(&double_odom_fw_dev_per_fw, "odom_fw_dev_per_fw");
+
+	double double_odom_fw_dev_per_rot = 2;
+	ddr_->RegisterVariable(&double_odom_fw_dev_per_rot, "odom_fw_dev_per_rot");
+
+	double double_odom_rot_dev_per_fw = 2;
+	ddr_->RegisterVariable(&double_odom_rot_dev_per_fw, "odom_rot_dev_per_fw");
+
+	double double_odom_rot_dev_per_rot = 2;
+	ddr_->RegisterVariable(&double_odom_rot_dev_per_rot, "odom_rot_dev_per_rot");
+
+	ddr_->PublishServicesTopics();
+}
+
 
 void EMcl2Node::initPF(void)
 {

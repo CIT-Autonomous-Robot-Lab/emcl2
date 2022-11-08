@@ -8,9 +8,11 @@ find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
   tf2
   tf2_ros
+	ddynamic_reconfigure
 )
 
 catkin_package(
+  CATKIN_DEPENDS roscpp ddynamic_reconfigure
 )
 
 include_directories(include ${catkin_INCLUDE_DIRS} )
