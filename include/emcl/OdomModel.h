@@ -17,14 +17,14 @@ public:
 	void setDev(double length, double angle);
 	double drawFwNoise(void);
 	double drawRotNoise(void);
-private:
-	double fw_dev_;
-	double rot_dev_;
 
 	double fw_var_per_fw_;
 	double fw_var_per_rot_;
 	double rot_var_per_fw_;
 	double rot_var_per_rot_;
+private:
+	double fw_dev_;
+	double rot_dev_;
 
 	std::normal_distribution<> std_norm_dist_;
 	

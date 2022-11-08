@@ -16,6 +16,8 @@
 #include "geometry_msgs/PoseWithCovarianceStamped.h"
 #include "std_srvs/Empty.h"
 
+#include <ddynamic_reconfigure/ddynamic_reconfigure.h>
+
 namespace emcl2 {
 
 class EMcl2Node
@@ -23,6 +25,9 @@ class EMcl2Node
 public:
 	EMcl2Node();
 	~EMcl2Node();
+
+	std::shared_ptr<OdomModel> om_;
+	std::shared_ptr<OdomModel> initOdometry(void);
 
 	void loop(void);
 	int getOdomFreq(void);
@@ -40,6 +45,8 @@ private:
 	ros::ServiceServer global_loc_srv_;
 
 	ros::Time scan_time_stamp_;
+
+	std::shared_ptr<ddynamic_reconfigure::DDynamicReconfigure> ddr_;
 
 	std::string footprint_frame_id_;
 	std::string global_frame_id_;
@@ -68,9 +75,9 @@ private:
 	bool getLidarPose(double& x, double& y, double& yaw, bool& inv);
 
 	void initCommunication(void);
+	void registerDynamicParam(void);
 	void initPF(void);
 	std::shared_ptr<LikelihoodFieldMap> initMap(void);
-	std::shared_ptr<OdomModel> initOdometry(void);
 
 	void cbScan(const sensor_msgs::LaserScan::ConstPtr &msg);
 	bool cbSimpleReset(std_srvs::Empty::Request& req, std_srvs::Empty::Response& res);
