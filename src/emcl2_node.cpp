@@ -16,6 +16,7 @@ EMcl2Node::EMcl2Node() : private_nh_("~")
 {
 	initCommunication();
 	initPF();
+	registerDynamicParam();
 
 	private_nh_.param("odom_freq", odom_freq_, 20);
 
@@ -47,10 +48,23 @@ void EMcl2Node::initCommunication(void)
 	tfl_.reset(new tf2_ros::TransformListener(*tf_));
 }
 
+void EMcl2Node::registerDynamicParam(void)
+{
+	ddr_ = std::make_shared<ddynamic_reconfigure::DDynamicReconfigure>(private_nh_);
+
+	ddr_->RegisterVariable(&om_->fw_var_per_fw_, "odom_fw_dev_per_fw");
+	ddr_->RegisterVariable(&om_->fw_var_per_rot_, "odom_fw_dev_per_rot");
+	ddr_->RegisterVariable(&om_->rot_var_per_fw_, "odom_rot_dev_per_fw");
+	ddr_->RegisterVariable(&om_->rot_var_per_rot_, "odom_rot_dev_per_rot");
+
+	ddr_->PublishServicesTopics();
+}
+
+
 void EMcl2Node::initPF(void)
 {
 	std::shared_ptr<LikelihoodFieldMap> map = std::move(initMap());
-	std::shared_ptr<OdomModel> om = std::move(initOdometry());
+	om_ = std::move(initOdometry());
 
 	Scan scan;
 	private_nh_.param("laser_min_range", scan.range_min_, 0.0);
@@ -76,7 +90,7 @@ void EMcl2Node::initPF(void)
 	private_nh_.param("range_threshold", range_threshold, 0.1);
 	private_nh_.param("sensor_reset", sensor_reset, true);
 
-	pf_.reset(new ExpResetMcl2(init_pose, num_particles, scan, om, map,
+	pf_.reset(new ExpResetMcl2(init_pose, num_particles, scan, om_, map,
 				alpha_th, ex_rad_pos, ex_rad_ori,
 				extraction_rate, range_threshold, sensor_reset));
 }
