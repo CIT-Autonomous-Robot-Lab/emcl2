@@ -57,6 +57,8 @@ void EMcl2Node::registerDynamicParam(void)
 	ddr_->RegisterVariable(&om_->rot_var_per_fw_, "odom_rot_dev_per_fw");
 	ddr_->RegisterVariable(&om_->rot_var_per_rot_, "odom_rot_dev_per_rot");
 
+	ddr_->RegisterVariable(&om_->alpha_th, "alpha_threshold");
+
 	ddr_->PublishServicesTopics();
 }
 
@@ -240,7 +242,7 @@ void EMcl2Node::publishOdomFrame(double x, double y, double t)
 	}
 	tf2::convert(odom_to_map.pose, latest_tf_);
 	
-	ros::Time transform_expiration = (ros::Time(scan_time_stamp_.toSec() + 0.2));
+	ros::Time transform_expiration = (ros::Time(scan_time_stamp_.toSec() + 1.0));
 	geometry_msgs::TransformStamped tmp_tf_stamped;
 	tmp_tf_stamped.header.frame_id = global_frame_id_;
 	tmp_tf_stamped.header.stamp = transform_expiration;
