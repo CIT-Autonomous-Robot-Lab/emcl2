@@ -90,11 +90,11 @@ void EMcl2Node::initPF(void)
 	bool sensor_reset;
 	private_nh_.param("extraction_rate", extraction_rate, 0.1);
 	private_nh_.param("range_threshold", range_threshold, 0.1);
-	private_nh_.param("sensor_reset", sensor_reset, true);
+	private_nh_.param("sensor_reset", sensor_reset, false);
 
 	pf_.reset(new ExpResetMcl2(init_pose, num_particles, scan, om_, map,
 				alpha_th, ex_rad_pos, ex_rad_ori,
-				extraction_rate, range_threshold, sensor_reset));
+				extraction_rate, range_threshold, false));
 }
 
 std::shared_ptr<OdomModel> EMcl2Node::initOdometry(void)
