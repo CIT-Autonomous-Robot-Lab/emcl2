@@ -21,8 +21,9 @@ public:
 	~ExpResetMcl2();
 
 	void sensorUpdate(double lidar_x, double lidar_y, double lidar_t, bool inv);
-private:
+
 	double alpha_threshold_;
+private:
 	double expansion_radius_position_;
 	double expansion_radius_orientation_;
 

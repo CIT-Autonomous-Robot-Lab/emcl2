@@ -57,7 +57,7 @@ void EMcl2Node::registerDynamicParam(void)
 	ddr_->RegisterVariable(&om_->rot_var_per_fw_, "odom_rot_dev_per_fw");
 	ddr_->RegisterVariable(&om_->rot_var_per_rot_, "odom_rot_dev_per_rot");
 
-	ddr_->RegisterVariable(&om_->alpha_th, "alpha_threshold");
+	ddr_->RegisterVariable(&pf_->alpha_threshold_, "alpha_threshold");
 
 	ddr_->PublishServicesTopics();
 }
